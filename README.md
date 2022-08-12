@@ -1,6 +1,4 @@
-# matrix
-
-Matrix Todo
+# Matrix Todo
 
 ## Getting Started
 
