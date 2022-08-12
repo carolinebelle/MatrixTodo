@@ -106,7 +106,7 @@ class TodoWidget extends StatelessWidget {
         fontColor = Colors.green;
       } else if (todo.quadrant == 2) {
         // not ugent but important
-        fontColor = Colors.yellow;
+        fontColor = Color.fromARGB(255, 214, 198, 49);
       } else if (todo.quadrant == 3) {
         // delegate it
         fontColor = Colors.orange;

@@ -10,7 +10,7 @@ class ToDoPieChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<TodosProvider>(context);
-    Map<String, double> dataMap = provider.dataMap;
+    Map<String, double> dataMap = provider.dataMapCompleted;
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
@@ -18,7 +18,7 @@ class ToDoPieChart extends StatelessWidget {
         dataMap: dataMap,
         colorList: const <Color>[
           Colors.green,
-          Colors.yellow,
+          Color.fromARGB(255, 214, 198, 49),
           Colors.orange,
           Colors.red,
           Colors.grey,

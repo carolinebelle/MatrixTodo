@@ -4,7 +4,7 @@ import '../model/todo.dart';
 class TodosProvider extends ChangeNotifier {
   final List<Todo> _todos = [];
   final Map<String, double> _map = {
-    "Do": 1,
+    "Do": 0,
     "Schedule": 0,
     "Delegate": 0,
     "Delete": 0,
@@ -17,11 +17,43 @@ class TodosProvider extends ChangeNotifier {
 
   Map<String, double> get dataMap => _map;
 
+  Map<String, double> get dataMapCompleted {
+    Map<String, double> m = {
+      "Do": 0,
+      "Schedule": 0,
+      "Delegate": 0,
+      "Delete": 0,
+      "Other": 0,
+    };
+
+    for (var t in _todos) {
+      if (t.isDone) updateMap("ADD", t.quadrant, m);
+    }
+
+    return m;
+  }
+
+  Map<String, double> get dataMapWaiting {
+    Map<String, double> m = {
+      "Do": 0,
+      "Schedule": 0,
+      "Delegate": 0,
+      "Delete": 0,
+      "Other": 0,
+    };
+
+    for (var t in _todos) {
+      if (!t.isDone) updateMap("ADD", t.quadrant, m);
+    }
+
+    return m;
+  }
+
   void addTodo(Todo todo) {
     _todos.add(todo);
     _todos.sort((a, b) => a.quadrant.compareTo(b.quadrant));
 
-    updateMap("ADD", todo.quadrant);
+    updateMap("ADD", todo.quadrant, _map);
 
     notifyListeners();
   }
@@ -29,7 +61,7 @@ class TodosProvider extends ChangeNotifier {
   void removeTodo(Todo todo) {
     _todos.remove(todo);
 
-    updateMap("REMOVE", todo.quadrant);
+    updateMap("REMOVE", todo.quadrant, _map);
 
     notifyListeners();
   }
@@ -46,8 +78,8 @@ class TodosProvider extends ChangeNotifier {
     todo.title = title;
     todo.description = description;
     if (todo.quadrant != quadrant) {
-      updateMap("REMOVE", todo.quadrant); // remove old quadrant
-      updateMap("ADD", quadrant); // add new quadrant
+      updateMap("REMOVE", todo.quadrant, _map); // remove old quadrant
+      updateMap("ADD", quadrant, _map); // add new quadrant
       todo.quadrant = quadrant;
     }
     _todos.sort((a, b) => a.quadrant.compareTo(b.quadrant));
@@ -55,43 +87,43 @@ class TodosProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateMap(String action, int quadrant) {
+  void updateMap(String action, int quadrant, Map<String, double> m) {
     switch (action) {
       case "ADD":
         switch (quadrant) {
           case 0:
-            _map.update("Other", (value) => value + 1);
+            m.update("Other", (value) => value + 1);
             break; // The switch statement must be told to exit, or it will execute every case.
           case 1:
-            _map.update("Do", (value) => value + 1);
+            m.update("Do", (value) => value + 1);
             break;
           case 2:
-            _map.update("Schedule", (value) => value + 1);
+            m.update("Schedule", (value) => value + 1);
             break;
           case 3:
-            _map.update("Delegate", (value) => value + 1);
+            m.update("Delegate", (value) => value + 1);
             break;
           case 4:
-            _map.update("Delete", (value) => value + 1);
+            m.update("Delete", (value) => value + 1);
             break;
         }
         break; // The switch statement must be told to exit, or it will execute every case.
       case "REMOVE":
         switch (quadrant) {
           case 0:
-            _map.update("Other", (value) => value - 1);
+            m.update("Other", (value) => value - 1);
             break; // The switch statement must be told to exit, or it will execute every case.
           case 1:
-            _map.update("Do", (value) => value - 1);
+            m.update("Do", (value) => value - 1);
             break;
           case 2:
-            _map.update("Schedule", (value) => value - 1);
+            m.update("Schedule", (value) => value - 1);
             break;
           case 3:
-            _map.update("Delegate", (value) => value - 1);
+            m.update("Delegate", (value) => value - 1);
             break;
           case 4:
-            _map.update("Delete", (value) => value - 1);
+            m.update("Delete", (value) => value - 1);
             break;
         }
         break;

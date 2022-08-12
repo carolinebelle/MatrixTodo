@@ -109,7 +109,7 @@ class _AddTodoDialogWidgetState extends State<AddTodoDialogWidget> {
               children: [
                 QuadrantTarget(
                   context: context,
-                  color: Colors.yellow,
+                  color: const Color.fromARGB(255, 214, 198, 49),
                   label: "High Importance, Low Urgency",
                   onSavedTodo: addTodo,
                   quadrant: 2,
