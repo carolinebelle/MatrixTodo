@@ -38,7 +38,6 @@ class _AddTodoDialogWidgetState extends State<AddTodoDialogWidget> {
   Widget _buildDraggable(BuildContext context) {
     return (LongPressDraggable<Todo>(
       data: Todo(
-        id: "unique id",
         createdTime: DateTime.now(),
         title: title,
         description: description,
@@ -157,22 +156,19 @@ class _AddTodoDialogWidgetState extends State<AddTodoDialogWidget> {
       final provider = Provider.of<TodosProvider>(context, listen: false);
       if (widget.todo != null) {
         provider.updateTodo(
-            widget.todo!,
-            editedTitle ? title : widget.todo!.title,
-            editedDesc ? description : widget.todo!.description,
-            quadrant);
+            todo: widget.todo!,
+            title: editedTitle ? title : widget.todo!.title,
+            description: editedDesc ? description : widget.todo!.description,
+            quadrant: quadrant);
       } else {
         final todo = Todo(
           createdTime: DateTime.now(),
-          id: DateTime.now().toString(),
           title: title,
           description: description,
           quadrant: quadrant,
         );
-
         provider.addTodo(todo);
       }
-
       Navigator.of(context).pop();
     }
   }

@@ -1,21 +1,22 @@
 import 'package:flutter/cupertino.dart';
+import '../db/todos_database.dart';
 import '../model/todo.dart';
 
 class TodosProvider extends ChangeNotifier {
-  final List<Todo> _todos = [];
-  final Map<String, double> _map = {
-    "Do": 0,
-    "Schedule": 0,
-    "Delegate": 0,
-    "Delete": 0,
-    "Other": 0,
-  };
+  late List<Todo> _todos = [];
+
+  TodosProvider() {
+    queryDb();
+  }
+
+  Future queryDb() async {
+    _todos = await TodosDatabase.instance.readAllTodos();
+    notifyListeners();
+  }
 
   List<Todo> get todos => _todos.where((todo) => todo.isDone == false).toList();
   List<Todo> get todosCompleted =>
       _todos.where((todo) => todo.isDone == true).toList();
-
-  Map<String, double> get dataMap => _map;
 
   Map<String, double> get dataMapCompleted {
     Map<String, double> m = {
@@ -49,39 +50,42 @@ class TodosProvider extends ChangeNotifier {
     return m;
   }
 
-  void addTodo(Todo todo) {
-    _todos.add(todo);
+  Future addTodo(Todo todo) async {
+    Todo dbTodo = await TodosDatabase.instance.create(todo);
+    _todos.add(dbTodo);
     _todos.sort((a, b) => a.quadrant.compareTo(b.quadrant));
-
-    updateMap("ADD", todo.quadrant, _map);
 
     notifyListeners();
   }
 
-  void removeTodo(Todo todo) {
+  Future removeTodo(Todo todo) async {
+    await TodosDatabase.instance.delete(todo.id!);
     _todos.remove(todo);
-
-    updateMap("REMOVE", todo.quadrant, _map);
 
     notifyListeners();
   }
 
   bool toggleTodoStatus(Todo todo) {
-    todo.isDone = !todo.isDone;
-    _todos.sort((a, b) => a.quadrant.compareTo(b.quadrant));
+    updateTodo(todo: todo, isDone: !todo.isDone);
 
-    notifyListeners();
-    return todo.isDone;
+    return !todo.isDone;
   }
 
-  void updateTodo(Todo todo, String title, String description, int quadrant) {
-    todo.title = title;
-    todo.description = description;
-    if (todo.quadrant != quadrant) {
-      updateMap("REMOVE", todo.quadrant, _map); // remove old quadrant
-      updateMap("ADD", quadrant, _map); // add new quadrant
-      todo.quadrant = quadrant;
-    }
+  void updateTodo(
+      {required Todo todo,
+      String? title,
+      String? description,
+      int? quadrant,
+      bool? isDone}) {
+    Todo updatedTodo = todo.copy(
+        title: title ?? todo.title,
+        description: description ?? todo.description,
+        quadrant: quadrant ?? todo.quadrant,
+        isDone: isDone ?? todo.isDone);
+
+    TodosDatabase.instance.update(updatedTodo);
+    _todos.remove(todo);
+    _todos.add(updatedTodo);
     _todos.sort((a, b) => a.quadrant.compareTo(b.quadrant));
 
     notifyListeners();
