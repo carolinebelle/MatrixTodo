@@ -1,5 +1,9 @@
 # Matrix Todo
 
+## Privacy Polciy
+
+This app is not connected to the internet and does not collect any personal identifying information from any users. All data is stored locally on the device.
+
 ## Getting Started
 
 This project is an extended To Do app made with Flutter. It implements traditional "to do" functionality to add, edit, and delete items. It also leverages the Eisenhower Matrix strategy for prioritization.
