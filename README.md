@@ -1,6 +1,6 @@
 # Matrix Todo
 
-## Privacy Polciy
+## Privacy Policy
 
 This app is not connected to the internet and does not collect any personal identifying information from any users. All data is stored locally on the device.
 
