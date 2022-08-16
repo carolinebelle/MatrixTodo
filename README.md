@@ -1,8 +1,6 @@
 # Matrix Todo
 
-## Privacy Policy
-
-This app is not connected to the internet and does not collect any personal identifying information from any users. All data is stored locally on the device.
+https://user-images.githubusercontent.com/71263658/184940666-9b354854-942f-4745-8328-c16fa14ad235.mp4
 
 ## Getting Started
 
@@ -20,6 +18,10 @@ This project is an extended To Do app made with Flutter. It implements tradition
 ![Simulator Screen Shot - iPod touch (7th generation) - 2022-08-11 at 23 30 25](https://user-images.githubusercontent.com/71263658/184285366-c38d31d6-116b-4534-83df-92cc1085c7a6.png)
 
 
+## Privacy Policy
+
+This app is not connected to the internet and does not collect any personal identifying information from any users. All data is stored locally on the device.
+
 ## Background
 
-This is my first flutter app. This project was made over two days as a way to learn flutter while on a vacation.
+This is my first flutter app.
